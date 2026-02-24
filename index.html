@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="el">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#1b4965" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>Κίνηση Ράβδου - Συνδυαστική 1</title>
+    <link rel="manifest" href="./manifest.json?v=1" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png?v=1" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="top-copy">© 2026 Artemis Renieris</div>
+    <main class="layout">
+      <section class="panel controls">
+        <h1>Κίνηση Ράβδου - Συνδυαστική Άσκηση</h1>
+        <p class="subtitle">Θέμα Γ: τρία στάδια κίνησης (B<sub>1</sub> → B<sub>2</sub> → B<sub>3</sub>)</p>
+
+        <div class="constants">
+          <h2>Δεδομένα</h2>
+          <p>L = 1.0 m, B<sub>1</sub> = 1 T, B<sub>3</sub> = 1 T</p>
+          <p>R<sub>1</sub> = 2 Ω, R<sub>2</sub> = 2 Ω, R<sub>KL</sub> = 3 Ω</p>
+          <p>F = 0.8 N (μέχρι t<sub>1</sub>), μετά F′ σταθερή</p>
+        </div>
+
+        <label for="massSlider">Μάζα ράβδου m: <span id="massValue">0.50</span> kg</label>
+        <input id="massSlider" type="range" min="0.2" max="2.0" step="0.05" value="0.50" />
+
+        <label for="totalLengthSlider">Συνολικό μήκος τροχιάς: <span id="totalLengthValue">170.0</span> m</label>
+        <input id="totalLengthSlider" type="range" min="80" max="260" step="1" value="170" />
+
+        <label for="x1Slider">Θέση t<sub>1</sub> (όριο B<sub>1</sub>/B<sub>2</sub>): <span id="x1Value">70.0</span> m</label>
+        <input id="x1Slider" type="range" min="10" max="200" step="0.5" value="70" />
+
+        <label for="x2Slider">Θέση t<sub>2</sub> (είσοδος στο B<sub>3</sub>): <span id="x2Value">95.0</span> m</label>
+        <input id="x2Slider" type="range" min="20" max="220" step="0.5" value="95" />
+
+        <label for="x3Slider">Θέση t<sub>3</sub> (κλείσιμο διακόπτη δ): <span id="x3Value">120.0</span> m</label>
+        <input id="x3Slider" type="range" min="30" max="240" step="0.5" value="120" />
+
+        <div class="btn-row">
+          <button id="playPauseBtn" type="button">Play</button>
+          <button id="resetBtn" type="button">Reset</button>
+          <button id="slowBtn" type="button">Slow: Off</button>
+        </div>
+
+        <div class="measurements">
+          <h2>Μετρήσεις</h2>
+          <p>Χρόνος t: <span id="tValue">0.00</span> s</p>
+          <p>Θέση x: <span id="xValue">0.00</span> m</p>
+          <p>Ταχύτητα υ: <span id="uValue">0.00</span> m/s</p>
+          <p>Επιτάχυνση α: <span id="aValue">0.00</span> m/s²</p>
+          <p>ΗΕΔ E<sub>επ</sub>: <span id="eValue">0.00</span> V</p>
+          <p>Ρεύμα ράβδου I<sub>KL</sub>: <span id="iRodValue">0.00</span> A</p>
+          <p>Ρεύμα R<sub>1</sub>: <span id="i1Value">0.00</span> A</p>
+          <p>Ρεύμα R<sub>2</sub>: <span id="i2Value">0.00</span> A</p>
+          <p>Μαγνητική δύναμη F<sub>L</sub>: <span id="fmagValue">0.00</span> N</p>
+          <p>Εξωτερική δύναμη: <span id="fextValue">0.00</span> N</p>
+          <p>Κατάσταση διακόπτη δ: <span id="switchValue">Ανοικτός</span></p>
+          <p>Φάση: <span id="phaseValue">t = 0</span></p>
+          <p>u<sub>ορ</sub> (ανοικτός): <span id="uorOpenValue">0.00</span> m/s</p>
+          <p>u′<sub>ορ</sub> (κλειστός): <span id="uorClosedValue">0.00</span> m/s</p>
+          <p>V<sub>KL</sub> (όταν δ κλειστός): <span id="vklValue">0.00</span> V</p>
+        </div>
+      </section>
+
+      <section class="panel sim-panel">
+        <canvas id="simCanvas" width="980" height="500" aria-label="Προσομοίωση ράβδου"></canvas>
+        <canvas id="chartCanvas" width="980" height="290" aria-label="Γράφημα ταχύτητας"></canvas>
+        <div class="notes">
+          <p><strong>Σημείωση:</strong> Αν οι θέσεις t<sub>1</sub>, t<sub>2</sub>, t<sub>3</sub> είναι πολύ κοντά, η προσομοίωση τις επεκτείνει αυτόματα για ρεαλιστική μετάβαση φάσεων.</p>
+          <p>Περιοχή B<sub>1</sub>: πεδίο προς τα μέσα (×), με F = 0.8 N μέχρι t<sub>1</sub>.</p>
+          <p>Περιοχή B<sub>2</sub>: B = 0, αφαιρείται η F και η ράβδος κινείται ευθύγραμμα ομαλά.</p>
+          <p>Περιοχή B<sub>3</sub>: πεδίο προς τα έξω (•), εφαρμόζεται F′ ώστε πριν το t<sub>3</sub> να μένει υ = u<sub>ορ</sub>. Στο t<sub>3</sub> κλείνει ο διακόπτης και η ράβδος τείνει στη νέα u′<sub>ορ</sub>.</p>
+        </div>
+      </section>
+    </main>
+
+    <script defer src="./pwa.js"></script>
+    <script defer src="./sim.js"></script>
+  </body>
+</html>
