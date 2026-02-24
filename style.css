@@ -147,7 +147,7 @@ button {
 }
 
 #simCanvas {
-  aspect-ratio: 980 / 500;
+  aspect-ratio: 980 / 620;
 }
 
 #chartCanvas {
@@ -230,7 +230,7 @@ button {
   }
 
   #simCanvas {
-    aspect-ratio: 980 / 620;
+    aspect-ratio: 980 / 700;
   }
 
   .canvas-top-bar {

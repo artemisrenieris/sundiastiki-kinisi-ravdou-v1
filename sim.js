@@ -38,8 +38,8 @@ const uorClosedValue = document.getElementById("uorClosedValue");
 const vklValue = document.getElementById("vklValue");
 
 const ORIGIN_X = 110;
-const TOP_RAIL_Y = 155;
-const BOTTOM_RAIL_Y = 355;
+const TOP_RAIL_Y = 175;
+const BOTTOM_RAIL_Y = 425;
 const ROD_DRAW_W = 16;
 const DT_CAP = 0.03;
 const TERMINAL_REACH_RATIO = 0.98;
