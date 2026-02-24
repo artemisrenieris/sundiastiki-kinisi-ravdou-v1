@@ -360,15 +360,17 @@ function drawArrow(ctx, x1, y1, x2, y2, color) {
   const angle = Math.atan2(y2 - y1, x2 - x1);
   ctx.strokeStyle = color;
   ctx.fillStyle = color;
-  ctx.lineWidth = 3;
+  ctx.lineWidth = 4;
   ctx.beginPath();
   ctx.moveTo(x1, y1);
   ctx.lineTo(x2, y2);
   ctx.stroke();
+  const headLen = 14;
+  const headSpread = 0.45;
   ctx.beginPath();
   ctx.moveTo(x2, y2);
-  ctx.lineTo(x2 - 10 * Math.cos(angle - 0.3), y2 - 10 * Math.sin(angle - 0.3));
-  ctx.lineTo(x2 - 10 * Math.cos(angle + 0.3), y2 - 10 * Math.sin(angle + 0.3));
+  ctx.lineTo(x2 - headLen * Math.cos(angle - headSpread), y2 - headLen * Math.sin(angle - headSpread));
+  ctx.lineTo(x2 - headLen * Math.cos(angle + headSpread), y2 - headLen * Math.sin(angle + headSpread));
   ctx.closePath();
   ctx.fill();
 }
@@ -529,7 +531,7 @@ function drawRodAndVectors() {
   const fExtLen = vectorLength(state.Fext, forceScale, 190);
   const fMagLen = vectorLength(fMagSigned, forceScale, 190);
   const fNetLen = nearTerminal ? 0 : vectorLength(fNetSigned, 95, 190);
-  const aLen = nearTerminal ? 0 : vectorLength(state.a, 260, 170);
+  const aLen = nearTerminal ? 0 : vectorLength(state.a, 360, 190);
   const frontBaseX = rodRight + 28;
   const backBaseX = rodLeft - 28;
   const labelX = frontBaseX + 10;
@@ -583,7 +585,7 @@ function drawRodAndVectors() {
       "#7b2cbf"
     );
     sctx.fillStyle = "#7b2cbf";
-    sctx.fillText("a", labelX, centerY + 122);
+    sctx.fillText("α", labelX, centerY + 122);
   }
 }
 
