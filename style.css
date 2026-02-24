@@ -142,6 +142,8 @@ button {
 
 .sim-stage {
   position: relative;
+  display: grid;
+  gap: 0.4rem;
 }
 
 #simCanvas {
@@ -149,14 +151,10 @@ button {
 }
 
 #chartCanvas {
-  aspect-ratio: 980 / 290;
+  aspect-ratio: 980 / 360;
 }
 
 .canvas-top-bar {
-  position: absolute;
-  left: 12px;
-  right: 12px;
-  top: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -202,6 +200,11 @@ button {
   padding-top: 0.45rem;
 }
 
+.notes-bottom {
+  margin: 0.2rem 0.9rem 0.9rem;
+  padding: 0.75rem 0.85rem;
+}
+
 .notes p {
   margin: 0.3rem 0;
   font-size: 0.91rem;
@@ -231,11 +234,8 @@ button {
   }
 
   .canvas-top-bar {
-    left: 6px;
-    right: 6px;
-    top: 6px;
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
     gap: 0.2rem;
     font-size: 0.78rem;
     padding: 0.3rem 0.45rem;
@@ -259,5 +259,9 @@ button {
     min-height: 34px;
     font-size: 0.78rem;
     padding: 0.3rem;
+  }
+
+  .notes-bottom {
+    margin: 0.2rem 0.55rem 0.7rem;
   }
 }

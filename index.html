@@ -62,7 +62,6 @@
 
       <section class="panel sim-panel">
         <div class="sim-stage">
-          <canvas id="simCanvas" width="980" height="500" aria-label="Προσομοίωση ράβδου"></canvas>
           <div class="canvas-top-bar">
             <span id="canvasStatusText">Κατάσταση: t = 0 (αναμονή)</span>
             <label class="currents-toggle" for="currentToggle">
@@ -70,21 +69,22 @@
               Εμφάνιση ρευμάτων
             </label>
           </div>
+          <canvas id="simCanvas" width="980" height="500" aria-label="Προσομοίωση ράβδου"></canvas>
           <div class="canvas-bottom-controls">
             <button id="playPauseBtn" type="button">Play</button>
             <button id="resetBtn" type="button">Reset</button>
             <button id="slowBtn" type="button">Slow: Off</button>
           </div>
         </div>
-        <canvas id="chartCanvas" width="980" height="290" aria-label="Γράφημα ταχύτητας"></canvas>
-        <div class="notes">
-          <p><strong>Σημείωση:</strong> Αν οι θέσεις t<sub>1</sub>, t<sub>2</sub>, t<sub>3</sub> είναι πολύ κοντά, η προσομοίωση τις επεκτείνει αυτόματα για ρεαλιστική μετάβαση φάσεων.</p>
-          <p>Περιοχή B<sub>1</sub>: πεδίο προς τα μέσα (×), με F = 0.8 N μέχρι t<sub>1</sub>.</p>
-          <p>Περιοχή B<sub>2</sub>: B = 0, αφαιρείται η F και η ράβδος κινείται ευθύγραμμα ομαλά.</p>
-          <p>Περιοχή B<sub>3</sub>: πεδίο προς τα έξω (•), εφαρμόζεται F′ ώστε πριν το t<sub>3</sub> να μένει υ = u<sub>ορ</sub>. Στο t<sub>3</sub> κλείνει ο διακόπτης και η ράβδος τείνει στη νέα u′<sub>ορ</sub>.</p>
-        </div>
+        <canvas id="chartCanvas" width="980" height="360" aria-label="Γράφημα ταχύτητας"></canvas>
       </section>
     </main>
+    <section class="panel notes notes-bottom">
+      <p><strong>Σημείωση:</strong> Αν οι θέσεις t<sub>1</sub>, t<sub>2</sub>, t<sub>3</sub> είναι πολύ κοντά, η προσομοίωση τις επεκτείνει αυτόματα για ρεαλιστική μετάβαση φάσεων.</p>
+      <p>Περιοχή B<sub>1</sub>: πεδίο προς τα μέσα (×), με F = 0.8 N μέχρι t<sub>1</sub>.</p>
+      <p>Περιοχή B<sub>2</sub>: B = 0, αφαιρείται η F και η ράβδος κινείται ευθύγραμμα ομαλά.</p>
+      <p>Περιοχή B<sub>3</sub>: πεδίο προς τα έξω (•), εφαρμόζεται F′ ώστε πριν το t<sub>3</sub> να μένει υ = u<sub>ορ</sub>. Στο t<sub>3</sub> κλείνει ο διακόπτης και η ράβδος τείνει στη νέα u′<sub>ορ</sub>.</p>
+    </section>
 
     <script defer src="./pwa.js"></script>
     <script defer src="./sim.js"></script>
