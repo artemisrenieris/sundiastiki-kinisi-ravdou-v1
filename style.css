@@ -140,12 +140,61 @@ button {
   background: linear-gradient(180deg, #fafdff 0%, #eef4fc 100%);
 }
 
+.sim-stage {
+  position: relative;
+}
+
 #simCanvas {
   aspect-ratio: 980 / 500;
 }
 
 #chartCanvas {
   aspect-ratio: 980 / 290;
+}
+
+.canvas-top-bar {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.38rem 0.55rem;
+  border: 1px solid #c7d3e4;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #173455;
+}
+
+.currents-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.84rem;
+}
+
+.currents-toggle input {
+  width: 16px;
+  height: 16px;
+}
+
+.canvas-bottom-controls {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(90px, 110px));
+  gap: 0.45rem;
+  padding: 0.42rem;
+  border: 1px solid #c7d3e4;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 12px rgb(18 36 60 / 12%);
 }
 
 .notes {

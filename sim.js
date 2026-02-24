@@ -18,6 +18,8 @@ const x3Value = document.getElementById("x3Value");
 const playPauseBtn = document.getElementById("playPauseBtn");
 const resetBtn = document.getElementById("resetBtn");
 const slowBtn = document.getElementById("slowBtn");
+const currentToggle = document.getElementById("currentToggle");
+const canvasStatusText = document.getElementById("canvasStatusText");
 
 const tValue = document.getElementById("tValue");
 const xValue = document.getElementById("xValue");
@@ -43,6 +45,8 @@ const DT_CAP = 0.03;
 const TERMINAL_REACH_RATIO = 0.98;
 const OPEN_HOLD_TIME = 1.1;
 const PHASE_GAP_TIME = 1.0;
+const TERMINAL_A_EPS = 0.01;
+const TERMINAL_F_EPS = 0.01;
 
 const P = {
   B1: 1,
@@ -84,6 +88,7 @@ const state = {
   history: [],
   chartTMax: 14,
   chartUMax: 8,
+  showCurrents: false,
   lastTs: null
 };
 
@@ -242,6 +247,7 @@ function updateUiReadouts() {
   uorClosedValue.textContent = uOrClosed().toFixed(2);
   const vkl = state.switchClosed ? state.Irod * ((P.R1 * P.R2) / (P.R1 + P.R2)) : state.Irod * P.R1;
   vklValue.textContent = vkl.toFixed(2);
+  canvasStatusText.textContent = `Κατάσταση: ${stageText()} | δ: ${state.switchClosed ? "κλειστός" : "ανοικτός"} | υ=${state.u.toFixed(2)} m/s`;
 }
 
 function recalcElectromagnetics() {
@@ -517,12 +523,13 @@ function drawRodAndVectors() {
   const centerY = (TOP_RAIL_Y + BOTTOM_RAIL_Y) / 2;
   const fMagSigned = state.u === 0 ? 0 : -Math.sign(state.u) * state.FL;
   const fNetSigned = state.Fext + fMagSigned;
+  const nearTerminal = Math.abs(state.a) <= TERMINAL_A_EPS && Math.abs(fNetSigned) <= TERMINAL_F_EPS;
   const forceScale = 70;
 
   const fExtLen = vectorLength(state.Fext, forceScale, 190);
   const fMagLen = vectorLength(fMagSigned, forceScale, 190);
-  const fNetLen = vectorLength(fNetSigned, 95, 190);
-  const aLen = vectorLength(state.a, 260, 170);
+  const fNetLen = nearTerminal ? 0 : vectorLength(fNetSigned, 95, 190);
+  const aLen = nearTerminal ? 0 : vectorLength(state.a, 260, 170);
   const frontBaseX = rodRight + 28;
   const backBaseX = rodLeft - 28;
   const labelX = frontBaseX + 10;
@@ -577,6 +584,51 @@ function drawRodAndVectors() {
     );
     sctx.fillStyle = "#7b2cbf";
     sctx.fillText("a", labelX, centerY + 122);
+  }
+}
+
+function drawCurrentVectors() {
+  if (!state.showCurrents) return;
+  const xA = xToPx(0);
+  const xG = xToPx(trackMax());
+  const rodX = xToPx(state.x);
+  const topY = TOP_RAIL_Y;
+  const bottomY = BOTTOM_RAIL_Y;
+  const rodTop = TOP_RAIL_Y + 22;
+  const rodBottom = BOTTOM_RAIL_Y - 22;
+  const B = regionB(state.x);
+
+  if (state.Irod < 1e-4 || Math.abs(B) < 1e-9) {
+    sctx.fillStyle = "#a4161a";
+    sctx.font = "bold 16px Trebuchet MS";
+    sctx.fillText("Ρεύματα: I = 0 στην τρέχουσα περιοχή", xA + 14, TOP_RAIL_Y + 52);
+    return;
+  }
+
+  const downInBranches = B < 0;
+  const color = "#d90429";
+  sctx.lineWidth = 4;
+
+  if (downInBranches) {
+    drawArrow(sctx, xA + 14, TOP_RAIL_Y + 12, xA + 14, BOTTOM_RAIL_Y - 12, color);
+    if (state.switchClosed && state.I2 > 1e-4) {
+      drawArrow(sctx, xG - 14, TOP_RAIL_Y + 12, xG - 14, BOTTOM_RAIL_Y - 12, color);
+    }
+    drawArrow(sctx, rodX, rodTop, rodX, rodBottom, color);
+  } else {
+    drawArrow(sctx, xA + 14, BOTTOM_RAIL_Y - 12, xA + 14, TOP_RAIL_Y + 12, color);
+    if (state.switchClosed && state.I2 > 1e-4) {
+      drawArrow(sctx, xG - 14, BOTTOM_RAIL_Y - 12, xG - 14, TOP_RAIL_Y + 12, color);
+    }
+    drawArrow(sctx, rodX, rodBottom, rodX, rodTop, color);
+  }
+
+  sctx.fillStyle = color;
+  sctx.font = "bold 16px Trebuchet MS";
+  sctx.fillText(`IKL=${state.Irod.toFixed(2)}A`, rodX + 14, TOP_RAIL_Y - 28);
+  sctx.fillText(`I1=${state.I1.toFixed(2)}A`, xA - 90, TOP_RAIL_Y - 28);
+  if (state.switchClosed) {
+    sctx.fillText(`I2=${state.I2.toFixed(2)}A`, xG + 16, TOP_RAIL_Y - 28);
   }
 }
 
@@ -678,6 +730,7 @@ function drawChart() {
 function draw() {
   drawRegions();
   drawRodAndVectors();
+  drawCurrentVectors();
   drawChart();
 }
 
@@ -747,10 +800,15 @@ function handleInputs() {
     slowBtn.classList.toggle("slow-on", state.slow);
     slowBtn.textContent = state.slow ? "Slow: On" : "Slow: Off";
   });
+
+  currentToggle.addEventListener("change", () => {
+    state.showCurrents = currentToggle.checked;
+  });
 }
 
 handleInputs();
 resetState();
 normalizeBoundaries();
+state.showCurrents = currentToggle.checked;
 updateUiReadouts();
 requestAnimationFrame(tick);
