@@ -579,13 +579,13 @@ function drawRodAndVectors() {
     drawArrow(
       sctx,
       frontBaseX,
-      centerY + 128,
+      centerY + 170,
       frontBaseX + Math.sign(state.a) * aLen,
-      centerY + 128,
+      centerY + 170,
       "#7b2cbf"
     );
     sctx.fillStyle = "#7b2cbf";
-    sctx.fillText("α", labelX, centerY + 122);
+    sctx.fillText("α", labelX, centerY + 164);
   }
 }
 
